@@ -22,29 +22,23 @@ CREATE TABLE TRANSACTIONS (
     reference_number VARCHAR(100) UNIQUE NOT NULL,
     merchant_data VARCHAR(150) NOT NULL,
     dollar_amount DECIMAL NOT NULL,
-    close_date VARCHAR(50),
-    category VARCHAR(50),
+    close_date DATE NOT NULL,
+    category VARCHAR(50) NOT NULL,
     user_id CHAR(36),
     created_at TIMESTAMP NOT NULL,
     updated_at TIMESTAMP NOT NULL,
     deleted_at TIMESTAMP
 );
 
-CREATE INDEX idx_transactions_close_date ON TRANSACTIONS(close_date);
-
-CREATE INDEX idx_transactions_category ON TRANSACTIONS(category);
-
 CREATE TABLE REPORTS (
     id CHAR(36) PRIMARY KEY,
-    close_date VARCHAR(100),
+    close_date DATE NOT NULL,
     category VARCHAR(50) NOT NULL,
     total_amount DECIMAL NOT NULL,
     user_id CHAR(36),
-    transaction_id CHAR(36),
     created_at TIMESTAMP NOT NULL,
     updated_at TIMESTAMP NOT NULL,
-    deleted_at TIMESTAMP,
-    INDEX (close_date)
+    deleted_at TIMESTAMP
 );
 
 -- Add Foreign Key Constraints
@@ -52,15 +46,18 @@ CREATE TABLE REPORTS (
 ALTER TABLE TRANSACTIONS
 ADD CONSTRAINT FK_Transactions_Users
 FOREIGN KEY (user_id) REFERENCES USERS(id)
-ON DELETE CASCADE ON UPDATE CASCADE;
+ON DELETE CASCADE
+ON UPDATE CASCADE;
 
 ALTER TABLE REPORTS
 ADD CONSTRAINT FK_Reports_Users
 FOREIGN KEY (user_id) REFERENCES USERS(id)
-ON DELETE CASCADE ON UPDATE CASCADE;
+ON DELETE CASCADE
+ON UPDATE CASCADE;
 
 ALTER TABLE REPORTS
 ADD CONSTRAINT FK_Reports_Transactions
-FOREIGN KEY (transaction_id) REFERENCES TRANSACTIONS(id)
-ON DELETE CASCADE ON UPDATE CASCADE;
+FOREIGN KEY (id) REFERENCES TRANSACTIONS(id)
+ON DELETE CASCADE
+ON UPDATE CASCADE;
 
